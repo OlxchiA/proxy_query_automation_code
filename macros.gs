@@ -24,12 +24,15 @@ function refreshAndExtract() {
 // creates a spreadsheet, moves it into folder
 function moveFileToFolder() {
   // active sheet should be the extracted one
+  SpreadsheetApp.flush();
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
 
   var newSpreadsheet = SpreadsheetApp.create('Proxy Server Users: ' + Utilities.formatDate(new Date(), "GMT+1", "dd/MM/yyyy"));
+  Utilities.sleep(2000);
   var file = DriveApp.getFileById(newSpreadsheet.getId());
 
   // copy sheet to new spreadsheet
+  SpreadsheetApp.flush(); // this ensures the new spreadsheet actually exists by telling spreadsheet to wait till updated
   sheet.copyTo(newSpreadsheet);
 
     // remove the default 'Sheet1' from the new spreadsheet
@@ -55,7 +58,7 @@ function createMonthlyTrigger() {
   // Create a time-driven trigger that runs on the first of every month at 1 AM
   ScriptApp.newTrigger('main')
     .timeBased()
-    .onMonthDay(1)           // Run on the first day of the month
-    .atHour(1)               // Run at 1 AM
+    .onMonthDay(3)           // Run on the first day of the month
+    .atHour(10)               // Run at 1 AM (Actually now runs at 8AM)
     .create();
 }
